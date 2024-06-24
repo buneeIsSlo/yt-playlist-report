@@ -1,17 +1,13 @@
-import { Button } from "./components/ui/button";
+import Hero from "./components/Hero";
 
 function App() {
   return (
-    <main className="container">
-      <div>
-        <h1 className="text-6xl text-neutral-800 font-alpino font-black max-w-[20ch] text-center">
-          Configure your YouTube playlist like a boss.
-        </h1>
-        <Button size={"lg"} className="font-bold">
-          Configure
-        </Button>
-      </div>
-    </main>
+    <>
+      <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(red_0.1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+      <main className="container min-h-[200vh]">
+        <Hero />
+      </main>
+    </>
   );
 }
 
