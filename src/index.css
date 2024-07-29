@@ -53,6 +53,10 @@
     * {
         @apply border-border;
     }
+
+    body {
+        @apply h-[100dvh];
+    }
 }
 
 @layer base {
