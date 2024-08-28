@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Landing from "./pages/Landing.tsx";
-import Report, { loader as playlistLoader } from "./pages/Report.tsx";
+import Report from "./pages/Report.tsx";
+import { loader as playlistLoader } from "./api/PlaylistApi.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";

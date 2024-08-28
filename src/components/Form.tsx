@@ -11,7 +11,9 @@ const Form = () => {
   const isPending = navigation.state === "loading";
 
   function handleSubmit() {
-    if (!url.length) return;
+    if (!url.length) {
+      throw new Error("Invalid playlist URL");
+    }
     const playlistId = new URL(url).searchParams.get("list");
     navigate(`playlist/${playlistId}`);
   }
