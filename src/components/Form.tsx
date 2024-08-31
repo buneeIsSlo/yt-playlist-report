@@ -2,20 +2,36 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useNavigate, useNavigation } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { fetchPlaylistDetails } from "@/api/PlaylistApi";
 
 const Form = () => {
   const [url, setUrl] = useState("");
   const navigate = useNavigate();
   const navigation = useNavigation();
 
-  const isPending = navigation.state === "loading";
+  const playlistMutation = useMutation({
+    mutationFn: fetchPlaylistDetails,
+    onSuccess: (data) => {
+      navigate(`playlist/${data.id}`, { state: { playlistDetails: data } });
+    },
+    onError: (error) => {
+      console.error("Error fetching playlist details:", error);
+    },
+  });
+
+  const isPending =
+    navigation.state === "loading" || playlistMutation.isPending;
 
   function handleSubmit() {
     if (!url.length) {
       throw new Error("Invalid playlist URL");
     }
     const playlistId = new URL(url).searchParams.get("list");
-    navigate(`playlist/${playlistId}`);
+    if (!playlistId) {
+      throw new Error("Invalid playlist URL");
+    }
+    playlistMutation.mutate(playlistId);
   }
 
   return (
@@ -41,7 +57,7 @@ const Form = () => {
         </form>
         {isPending && (
           <p className="animate-pulse text-center">
-            Please wait, this may take few seconds...
+            Please wait, this may take a few seconds...
           </p>
         )}
       </div>

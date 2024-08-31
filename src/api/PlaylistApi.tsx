@@ -1,5 +1,5 @@
-import { useQuery, type QueryClient } from "@tanstack/react-query";
-import { LoaderFunctionArgs } from "react-router-dom";
+import { useSuspenseQuery, type QueryClient } from "@tanstack/react-query";
+import { defer, LoaderFunction, LoaderFunctionArgs } from "react-router-dom";
 
 export interface IPlaylist {
   kind: string;
@@ -32,8 +32,20 @@ type TVideoDetails = {
   };
 };
 
+export interface IPlaylistDetails {
+  id: string;
+  title: string;
+  description: string;
+  thumbnails: {
+    default: { url: string; width: number; height: number };
+    medium: { url: string; width: number; height: number };
+    high: { url: string; width: number; height: number };
+  };
+}
+
 const YT_PLAYLIST_API_URL = import.meta.env.VITE_YT_PLAYLIST_API_URL;
 const YT_VIDEOS_API_URL = import.meta.env.VITE_YT_VIDEOS_API_URL;
+const YT_PLAYLISTS = "https://www.googleapis.com/youtube/v3/playlists";
 const YT_API_KEY = import.meta.env.VITE_YT_API_KEY;
 
 const parseDuration = (duration: string): number => {
@@ -106,19 +118,72 @@ const calculatePlaylistDuration = async (
 export const getPlaylistDuration = (id: string) => ({
   queryKey: ["playlist", "duration", id],
   queryFn: () => calculatePlaylistDuration(id),
+  staleTime: 5 * 60 * 1000,
 });
 
-export const loader =
-  (queryClient: QueryClient) =>
-  async ({ params }: LoaderFunctionArgs) => {
-    const query = getPlaylistDuration(params.playlistId as string);
+// New API function to fetch playlist details
+export const fetchPlaylistDetails = async (
+  playlistId: string
+): Promise<IPlaylistDetails> => {
+  const response = await fetch(
+    `${YT_PLAYLISTS}?part=snippet&id=${playlistId}&key=${YT_API_KEY}`
+  );
 
-    return (
-      queryClient.getQueryData(query.queryKey) ??
-      (await queryClient.fetchQuery(query))
-    );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  const playlist = data.items[0];
+
+  return {
+    id: playlist.id,
+    title: playlist.snippet.title,
+    description: playlist.snippet.description,
+    thumbnails: playlist.snippet.thumbnails,
   };
+};
+
+export const loadPlaylist = (queryClient: QueryClient): LoaderFunction => {
+  return async ({ params }: LoaderFunctionArgs) => {
+    console.log("Loader function called with params:", params);
+
+    if (!params.playlistId) {
+      console.error("Playlist ID is missing");
+      throw new Error("Playlist ID is required");
+    }
+
+    try {
+      console.log("Fetching playlist details for ID:", params.playlistId);
+      const playlistDetails = await queryClient.ensureQueryData({
+        queryKey: ["playlistDetails", params.playlistId],
+        queryFn: () => fetchPlaylistDetails(params.playlistId as string),
+      });
+      console.log("Playlist details fetched:", playlistDetails);
+
+      console.log("Fetching playlist duration");
+      const durationPromise = queryClient.ensureQueryData(
+        getPlaylistDuration(params.playlistId)
+      );
+
+      return {
+        playlistDetails,
+        duration: defer(durationPromise),
+      };
+    } catch (error) {
+      console.error("Error in loader function:", error);
+      throw error;
+    }
+  };
+};
+
+export const loader = (queryClient: QueryClient): LoaderFunction => {
+  return (args: LoaderFunctionArgs) => {
+    console.log("Outer loader function called");
+    return loadPlaylist(queryClient)(args);
+  };
+};
 
 export const usePlaylistDuration = (playlistId: string) => {
-  return useQuery(getPlaylistDuration(playlistId));
+  return useSuspenseQuery(getPlaylistDuration(playlistId));
 };
