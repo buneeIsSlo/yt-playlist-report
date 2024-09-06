@@ -1,24 +1,25 @@
 import { useSuspenseQuery, type QueryClient } from "@tanstack/react-query";
 import { defer, LoaderFunction, LoaderFunctionArgs } from "react-router-dom";
 
-export interface IPlaylist {
+// Interfaces
+export interface PlaylistResponse {
   kind: string;
   etag: string;
   nextPageToken?: string;
-  items: IPlaylistItem[];
+  items: PlaylistItem[];
   pageInfo: PageInfo;
 }
 
-export interface IPlaylistItem {
+export interface PlaylistItem {
   kind: string;
   etag: string;
   id: string;
-  contentDetails: IContentDetails;
+  contentDetails: ContentDetails;
 }
 
-export interface IContentDetails {
+export interface ContentDetails {
   videoId: string;
-  videoPublishedAt: Date;
+  videoPublishedAt: string;
 }
 
 export interface PageInfo {
@@ -26,28 +27,75 @@ export interface PageInfo {
   resultsPerPage: number;
 }
 
-type TVideoDetails = {
-  contentDetails: {
-    duration: string;
-  };
-};
+interface Thumbnail {
+  url: string;
+  width: number;
+  height: number;
+}
 
-export interface IPlaylistDetails {
-  id: string;
+interface Thumbnails {
+  default: Thumbnail;
+  medium: Thumbnail;
+  high: Thumbnail;
+  standard?: Thumbnail;
+  maxres?: Thumbnail;
+}
+
+interface Snippet {
+  publishedAt: string;
+  channelId: string;
   title: string;
   description: string;
-  thumbnails: {
-    default: { url: string; width: number; height: number };
-    medium: { url: string; width: number; height: number };
-    high: { url: string; width: number; height: number };
+  thumbnails: Thumbnails;
+  channelTitle: string;
+  tags?: string[];
+  categoryId: string;
+  liveBroadcastContent: string;
+  localized: {
+    title: string;
+    description: string;
   };
 }
 
-const YT_PLAYLIST_API_URL = import.meta.env.VITE_YT_PLAYLIST_API_URL;
-const YT_VIDEOS_API_URL = import.meta.env.VITE_YT_VIDEOS_API_URL;
-const YT_PLAYLISTS = "https://www.googleapis.com/youtube/v3/playlists";
-const YT_API_KEY = import.meta.env.VITE_YT_API_KEY;
+interface Statistics {
+  viewCount: string;
+  likeCount: string;
+  favoriteCount: string;
+  commentCount: string;
+}
 
+interface VideoContentDetails {
+  duration: string;
+}
+
+export interface VideoItem {
+  kind: string;
+  etag: string;
+  id: string;
+  snippet: Snippet;
+  statistics: Statistics;
+  contentDetails: VideoContentDetails;
+}
+
+interface VideoDetailsResponse {
+  kind: string;
+  etag: string;
+  items: VideoItem[];
+  pageInfo: PageInfo;
+}
+
+export interface PlaylistDetails {
+  id: string;
+  title: string;
+  description: string;
+  thumbnails: Thumbnails;
+}
+
+// Constants
+const YOUTUBE_API_BASE_URL = "https://www.googleapis.com/youtube/v3";
+const YOUTUBE_API_KEY = import.meta.env.VITE_YT_API_KEY;
+
+// Helper functions
 const parseDuration = (duration: string): number => {
   const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
   const hours = parseInt(match?.[1] ?? "0") || 0;
@@ -63,39 +111,44 @@ const formatDuration = (seconds: number): string => {
   return `${hours}h ${minutes}m ${remainingSeconds}s`;
 };
 
-const fetchPlaylistItems = async (playlistId: string): Promise<string[]> => {
+// API functions
+const fetchPlaylistVideoIds = async (playlistId: string): Promise<string[]> => {
   const videoIds: string[] = [];
   let nextPageToken: string | undefined;
 
   do {
     const response = await fetch(
-      `${YT_PLAYLIST_API_URL}?part=contentDetails&playlistId=${playlistId}&key=${YT_API_KEY}&maxResults=50${
+      `${YOUTUBE_API_BASE_URL}/playlistItems?part=contentDetails&playlistId=${playlistId}&key=${YOUTUBE_API_KEY}&maxResults=50${
         nextPageToken ? `&pageToken=${nextPageToken}` : ""
       }`
     );
-    const data: IPlaylist = await response.json();
-    videoIds.push(
-      ...data.items.map((item: IPlaylistItem) => item.contentDetails.videoId)
-    );
+    const data: PlaylistResponse = await response.json();
+    videoIds.push(...data.items.map((item) => item.contentDetails.videoId));
     nextPageToken = data.nextPageToken;
   } while (nextPageToken);
 
   return videoIds;
 };
 
-const fetchVideoDetails = async (videoIds: string[]): Promise<number> => {
-  const fetchChunk = async (chunk: string[]): Promise<number> => {
+const fetchVideoDetails = async (
+  videoIds: string[]
+): Promise<{ videos: VideoItem[]; totalDuration: number }> => {
+  const fetchChunk = async (
+    chunk: string[]
+  ): Promise<{ videos: VideoItem[]; chunkDuration: number }> => {
     const response = await fetch(
-      `${YT_VIDEOS_API_URL}?part=contentDetails&id=${chunk.join(
+      `${YOUTUBE_API_BASE_URL}/videos?part=contentDetails,snippet,statistics&id=${chunk.join(
         ","
-      )}&key=${YT_API_KEY}`
+      )}&key=${YOUTUBE_API_KEY}`
     );
-    const data = await response.json();
-    return data.items.reduce(
-      (acc: number, item: TVideoDetails) =>
-        acc + parseDuration(item.contentDetails.duration),
+
+    const data: VideoDetailsResponse = await response.json();
+    const chunkDuration = data.items.reduce(
+      (acc, item) => acc + parseDuration(item.contentDetails.duration),
       0
     );
+
+    return { videos: data.items, chunkDuration };
   };
 
   const chunks = [];
@@ -104,29 +157,34 @@ const fetchVideoDetails = async (videoIds: string[]): Promise<number> => {
   }
 
   const results = await Promise.all(chunks.map(fetchChunk));
-  return results.reduce((a, b) => a + b, 0);
+  const allVideos = results.flatMap((result) => result.videos);
+  const totalDuration = results.reduce(
+    (acc, result) => acc + result.chunkDuration,
+    0
+  );
+
+  return { videos: allVideos, totalDuration };
 };
 
-const calculatePlaylistDuration = async (
+const calculatePlaylistDetails = async (
   playlistId: string
-): Promise<string> => {
-  const videoIds = await fetchPlaylistItems(playlistId);
-  const totalSeconds = await fetchVideoDetails(videoIds);
-  return formatDuration(totalSeconds);
+): Promise<{ videos: VideoItem[]; duration: string }> => {
+  const videoIds = await fetchPlaylistVideoIds(playlistId);
+  const { videos, totalDuration } = await fetchVideoDetails(videoIds);
+  return { videos, duration: formatDuration(totalDuration) };
 };
 
-export const getPlaylistDuration = (id: string) => ({
-  queryKey: ["playlist", "duration", id],
-  queryFn: () => calculatePlaylistDuration(id),
+export const createPlaylistDetailsQuery = (id: string) => ({
+  queryKey: ["playlist", id],
+  queryFn: () => calculatePlaylistDetails(id),
   staleTime: 5 * 60 * 1000,
 });
 
-// New API function to fetch playlist details
 export const fetchPlaylistDetails = async (
   playlistId: string
-): Promise<IPlaylistDetails> => {
+): Promise<PlaylistDetails> => {
   const response = await fetch(
-    `${YT_PLAYLISTS}?part=snippet&id=${playlistId}&key=${YT_API_KEY}`
+    `${YOUTUBE_API_BASE_URL}/playlists?part=snippet&id=${playlistId}&key=${YOUTUBE_API_KEY}`
   );
 
   if (!response.ok) {
@@ -146,29 +204,23 @@ export const fetchPlaylistDetails = async (
 
 export const loadPlaylist = (queryClient: QueryClient): LoaderFunction => {
   return async ({ params }: LoaderFunctionArgs) => {
-    console.log("Loader function called with params:", params);
-
     if (!params.playlistId) {
-      console.error("Playlist ID is missing");
       throw new Error("Playlist ID is required");
     }
 
     try {
-      console.log("Fetching playlist details for ID:", params.playlistId);
       const playlistDetails = await queryClient.ensureQueryData({
         queryKey: ["playlistDetails", params.playlistId],
         queryFn: () => fetchPlaylistDetails(params.playlistId as string),
       });
-      console.log("Playlist details fetched:", playlistDetails);
 
-      console.log("Fetching playlist duration");
-      const durationPromise = queryClient.ensureQueryData(
-        getPlaylistDuration(params.playlistId)
+      const playlistDetailsPromise = queryClient.ensureQueryData(
+        createPlaylistDetailsQuery(params.playlistId)
       );
 
       return {
         playlistDetails,
-        duration: defer(durationPromise),
+        videoDetails: defer({ data: playlistDetailsPromise }),
       };
     } catch (error) {
       console.error("Error in loader function:", error);
@@ -178,12 +230,9 @@ export const loadPlaylist = (queryClient: QueryClient): LoaderFunction => {
 };
 
 export const loader = (queryClient: QueryClient): LoaderFunction => {
-  return (args: LoaderFunctionArgs) => {
-    console.log("Outer loader function called");
-    return loadPlaylist(queryClient)(args);
-  };
+  return (args: LoaderFunctionArgs) => loadPlaylist(queryClient)(args);
 };
 
 export const usePlaylistDuration = (playlistId: string) => {
-  return useSuspenseQuery(getPlaylistDuration(playlistId));
+  return useSuspenseQuery(createPlaylistDetailsQuery(playlistId));
 };
