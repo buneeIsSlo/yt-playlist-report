@@ -4,7 +4,7 @@ const Hero = () => {
   return (
     <section>
       <div>
-        <h1 className="text-6xl text-neutral-800 font-alpino font-black max-w-[25ch] text-center mx-auto my-10">
+        <h1 className="text-6xl text-neutral-800 font-black max-w-[25ch] text-center mx-auto my-10">
           Lorem, ipsum dolor sit amet consectetur adipisicing elit!
         </h1>
       </div>
