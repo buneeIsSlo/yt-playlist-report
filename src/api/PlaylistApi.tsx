@@ -168,10 +168,16 @@ const fetchVideoDetails = async (
 
 const calculatePlaylistDetails = async (
   playlistId: string
-): Promise<{ videos: VideoItem[]; duration: string }> => {
+): Promise<{ videos: VideoItem[]; duration: string; avgDuration: string }> => {
   const videoIds = await fetchPlaylistVideoIds(playlistId);
   const { videos, totalDuration } = await fetchVideoDetails(videoIds);
-  return { videos, duration: formatDuration(totalDuration) };
+  console.log(videos.length);
+  const avgDuration = Math.round(totalDuration / videos.length);
+  return {
+    videos,
+    duration: formatDuration(totalDuration),
+    avgDuration: formatDuration(avgDuration),
+  };
 };
 
 export const createPlaylistDetailsQuery = (id: string) => ({
