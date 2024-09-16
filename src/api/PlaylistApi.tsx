@@ -96,7 +96,7 @@ const YOUTUBE_API_BASE_URL = "https://www.googleapis.com/youtube/v3";
 const YOUTUBE_API_KEY = import.meta.env.VITE_YT_API_KEY;
 
 // Helper functions
-const parseDuration = (duration: string): number => {
+export const parseDuration = (duration: string): number => {
   const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
   const hours = parseInt(match?.[1] ?? "0") || 0;
   const minutes = parseInt(match?.[2] ?? "0") || 0;
@@ -104,7 +104,7 @@ const parseDuration = (duration: string): number => {
   return hours * 3600 + minutes * 60 + seconds;
 };
 
-const formatDuration = (seconds: number): string => {
+export const formatDuration = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;

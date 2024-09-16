@@ -1,6 +1,16 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { VideoItem } from "@/api/PlaylistApi";
+import { formatDuration, parseDuration, VideoItem } from "@/api/PlaylistApi";
 import { DataTableColumnHeader } from "./data-table-column-header";
+
+const formatDate = (timeStr: string): string => {
+  const date = new Date(timeStr);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  };
+  return date.toLocaleString("en-US", options);
+};
 
 const columns: ColumnDef<VideoItem>[] = [
   {
@@ -18,7 +28,7 @@ const columns: ColumnDef<VideoItem>[] = [
       <DataTableColumnHeader column={column} title="Video" />
     ),
     cell: ({ row }) => (
-      <span>
+      <div>
         <a
           href={`http://youtube.com/watch?v=${row.original.id}`}
           target="_blank"
@@ -26,7 +36,19 @@ const columns: ColumnDef<VideoItem>[] = [
         >
           {row.original.snippet.title}
         </a>
-      </span>
+      </div>
+    ),
+  },
+  {
+    id: "duration",
+    accessorFn: (row) => row.contentDetails.duration,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Duration" />
+    ),
+    cell: ({ row }) => (
+      <div>
+        {formatDuration(parseDuration(row.original.contentDetails.duration))}
+      </div>
     ),
   },
   {
@@ -36,7 +58,7 @@ const columns: ColumnDef<VideoItem>[] = [
       <DataTableColumnHeader column={column} title="Views" />
     ),
     cell: ({ row }) => (
-      <span>{Number(row.original.statistics.viewCount).toLocaleString()}</span>
+      <div>{Number(row.original.statistics.viewCount).toLocaleString()}</div>
     ),
   },
   {
@@ -46,7 +68,17 @@ const columns: ColumnDef<VideoItem>[] = [
       <DataTableColumnHeader column={column} title="Likes" />
     ),
     cell: ({ row }) => (
-      <p>{Number(row.original.statistics.likeCount).toLocaleString()}</p>
+      <div>{Number(row.original.statistics.likeCount).toLocaleString()}</div>
+    ),
+  },
+  {
+    id: "date",
+    accessorFn: (row) => row.snippet.publishedAt,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Published at" />
+    ),
+    cell: ({ row }) => (
+      <div>{formatDate(row.original.snippet.publishedAt)}</div>
     ),
   },
 ];
