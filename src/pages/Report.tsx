@@ -1,33 +1,59 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { usePlaylistDuration } from "@/api/PlaylistApi";
 import { useParams, useLoaderData, Await } from "react-router-dom";
-import { PlaylistDetails, VideoItem } from "@/api/PlaylistApi";
+import {
+  PlaylistDetails,
+  VideoItem,
+  formatDuration,
+  parseDuration,
+} from "@/api/PlaylistApi";
 import VideoTable from "@/components/VideosTable";
 import columns from "@/components/ui/columns";
+import { DualRangeSlider } from "@/components/ui/dual-range-slider";
 
 const PlaylistDuration: React.FC = () => {
   const { playlistId } = useParams<{ playlistId: string }>();
   const { data } = usePlaylistDuration(playlistId!);
+  const [values, setValues] = useState<number[]>([1, data?.videos.length || 1]);
 
   if (!data || !data.videos) {
     return <div>No video details available</div>;
   }
 
+  console.log(values[0] - 1, values[1] + 1);
+
+  const selectedVideos = data.videos.slice(values[0] - 1, values[1]);
+  const totalDuration = selectedVideos.reduce(
+    (acc, video) => acc + parseDuration(video.contentDetails.duration),
+    0
+  );
+  const avgDuration = ~~(totalDuration / selectedVideos.length);
+
   return (
     <div>
       <div className="w-full flex justify-between">
         <p className="text-4xl font-bold mb-4 bg-neutral-300 py-4 px-2 rounded-xl">
-          Total Duration: {data.duration}
+          Total Duration: {formatDuration(totalDuration)}
         </p>
         <p className="text-4xl font-bold mb-4 bg-neutral-300 py-4 px-2 rounded-xl">
-          Average Duration: {data.avgDuration}
+          Average Duration: {formatDuration(avgDuration)}
         </p>
         <p className="text-4xl font-bold mb-4 bg-neutral-300 py-4 px-2 rounded-xl">
-          Total Videos: {data.videos.length}
+          Total Videos: {selectedVideos.length}
         </p>
       </div>
+      <div className="py-6 w-full">
+        <DualRangeSlider
+          label={(value) => value}
+          value={values}
+          onValueChange={setValues}
+          min={1}
+          max={data.videos.length}
+          step={1}
+        />
+      </div>
       <div className="space-y-2">
-        <VideoTable columns={columns} data={data.videos} />
+        <VideoTable columns={columns} data={selectedVideos} />
       </div>
     </div>
   );
