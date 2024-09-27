@@ -9,7 +9,6 @@ import {
 } from "@/api/PlaylistApi";
 import VideoTable from "@/components/VideosTable";
 import columns from "@/components/ui/columns";
-import { DualRangeSlider } from "@/components/ui/dual-range-slider";
 
 const PlaylistDuration: React.FC = () => {
   const { playlistId } = useParams<{ playlistId: string }>();
@@ -30,30 +29,30 @@ const PlaylistDuration: React.FC = () => {
   const avgDuration = ~~(totalDuration / selectedVideos.length);
 
   return (
-    <div>
-      <div className="w-full flex justify-between">
-        <p className="text-4xl font-bold mb-4 bg-neutral-300 py-4 px-2 rounded-xl">
-          Total Duration: {formatDuration(totalDuration)}
-        </p>
-        <p className="text-4xl font-bold mb-4 bg-neutral-300 py-4 px-2 rounded-xl">
-          Average Duration: {formatDuration(avgDuration)}
-        </p>
-        <p className="text-4xl font-bold mb-4 bg-neutral-300 py-4 px-2 rounded-xl">
-          Total Videos: {selectedVideos.length}
-        </p>
-      </div>
-      <div className="py-6 w-full">
-        <DualRangeSlider
-          label={(value) => value}
-          value={values}
-          onValueChange={setValues}
-          min={1}
-          max={data.videos.length}
-          step={1}
-        />
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="bg-neutral-300 p-4 rounded-xl">
+          <h2 className="text-xl font-semibold">Total Duration</h2>
+          <p className="text-2xl">{formatDuration(totalDuration)}</p>
+        </div>
+        <div className="bg-neutral-300 p-4 rounded-xl">
+          <h2 className="text-xl font-semibold">Average Duration</h2>
+          <p className="text-2xl">{formatDuration(avgDuration)}</p>
+        </div>
+        <div className="bg-neutral-300 p-4 rounded-xl">
+          <h2 className="text-xl font-semibold">Total Videos</h2>
+          <p className="text-2xl">{selectedVideos.length}</p>
+        </div>
       </div>
       <div className="space-y-2">
-        <VideoTable columns={columns} data={selectedVideos} />
+        <VideoTable
+          columns={columns}
+          data={selectedVideos}
+          onRangeChange={setValues}
+          rangeValue={values}
+          totalVideos={data.videos.length}
+        />
+        ;
       </div>
     </div>
   );

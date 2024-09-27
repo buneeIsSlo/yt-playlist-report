@@ -25,11 +25,17 @@ import { DataTableToolbar } from "./ui/data-table-toolbar";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onRangeChange: (value: number[]) => void;
+  rangeValue: number[];
+  totalVideos: number;
 }
 
 const VideoTable = <TData, TValue>({
   columns,
   data,
+  onRangeChange,
+  rangeValue,
+  totalVideos,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -50,7 +56,12 @@ const VideoTable = <TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        rangeValue={rangeValue}
+        onRangeChange={onRangeChange}
+        totalVideos={totalVideos}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
