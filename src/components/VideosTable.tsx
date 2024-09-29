@@ -5,6 +5,7 @@ import {
   useReactTable,
   ColumnDef,
   SortingState,
+  VisibilityState,
   getPaginationRowModel,
   getFilteredRowModel,
   ColumnFiltersState,
@@ -39,6 +40,8 @@ const VideoTable = <TData, TValue>({
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
   const table = useReactTable({
     data,
     columns,
@@ -48,9 +51,11 @@ const VideoTable = <TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
     },
   });
 

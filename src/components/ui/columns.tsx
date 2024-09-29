@@ -20,6 +20,7 @@ const columns: ColumnDef<VideoItem>[] = [
       <DataTableColumnHeader column={column} title="Position" />
     ),
     cell: ({ row }) => <div>{String(row.index + 1)}</div>,
+    enableHiding: false,
   },
   {
     id: "video",
@@ -38,6 +39,7 @@ const columns: ColumnDef<VideoItem>[] = [
         </a>
       </div>
     ),
+    enableHiding: false,
   },
   {
     id: "duration",

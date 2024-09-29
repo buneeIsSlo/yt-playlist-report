@@ -2,7 +2,16 @@ import { Input } from "./input";
 import { Table } from "@tanstack/react-table";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+} from "@/components/ui/dropdown-menu";
 import { DualRangeSlider } from "./dual-range-slider";
+import { Settings2, TableIcon } from "lucide-react";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -19,7 +28,7 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex flex-1 items-center space-x-1">
+      <div className="flex gap-1 flex-1 items-center space-x-1">
         <Input
           placeholder="Filter videos..."
           value={(table.getColumn("video")?.getFilterValue() as string) ?? ""}
@@ -28,25 +37,61 @@ export function DataTableToolbar<TData>({
           }
           className="max-w-sm"
         />
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className="flex gap-1.5 items-center border-[1px] border-dashed border-neutral-300"
+            >
+              <Settings2 className="w-4 h-4" />
+              Set Range
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent side="bottom" align="start">
+            <div className="py-6 w-full">
+              <DualRangeSlider
+                label={(value) => `${value}`}
+                defaultValue={rangeValue}
+                onValueCommit={onRangeChange}
+                min={1}
+                max={totalVideos}
+                step={1}
+                minStepsBetweenThumbs={1}
+              />
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline">Set Range</Button>
-        </PopoverTrigger>
-        <PopoverContent side="bottom" align="end">
-          <div className="py-6 w-full">
-            <DualRangeSlider
-              label={(value) => `${value}`}
-              defaultValue={rangeValue}
-              onValueCommit={onRangeChange}
-              min={1}
-              max={totalVideos}
-              step={1}
-              minStepsBetweenThumbs={1}
-            />
-          </div>
-        </PopoverContent>
-      </Popover>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"outline"}>
+            <TableIcon className="w-4 h-4 mr-2" />
+            View
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-[150px]">
+          <DropdownMenuLabel>Toggle Columns</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {table
+            .getAllColumns()
+            .filter(
+              (column) =>
+                typeof column.accessorFn !== "undefined" && column.getCanHide()
+            )
+            .map((column) => {
+              return (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              );
+            })}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

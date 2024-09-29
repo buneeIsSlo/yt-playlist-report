@@ -79,7 +79,6 @@ const PlaylistDuration: React.FC = () => {
           rangeValue={values}
           totalVideos={data.videos.length}
         />
-        ;
       </div>
     </div>
   );
