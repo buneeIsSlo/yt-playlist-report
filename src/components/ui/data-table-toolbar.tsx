@@ -44,11 +44,11 @@ export function DataTableToolbar<TData>({
               className="flex gap-1.5 items-center border-[1px] border-dashed border-neutral-300"
             >
               <Settings2 className="w-4 h-4" />
-              Set Range
+              Select Range
             </Button>
           </PopoverTrigger>
           <PopoverContent side="bottom" align="start">
-            <div className="py-6 w-full">
+            <div className="py-8 w-full">
               <DualRangeSlider
                 label={(value) => `${value}`}
                 defaultValue={rangeValue}
@@ -66,7 +66,7 @@ export function DataTableToolbar<TData>({
         <DropdownMenuTrigger asChild>
           <Button variant={"outline"}>
             <TableIcon className="w-4 h-4 mr-2" />
-            View
+            Columns
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[150px]">
