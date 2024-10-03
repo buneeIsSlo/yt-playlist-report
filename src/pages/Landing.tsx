@@ -1,5 +1,7 @@
+import Faq from "@/components/Faq";
 import Hero from "../components/Hero";
 import Features from "@/components/Features";
+import CTASection from "@/components/Cta";
 
 function Landing() {
   return (
@@ -8,6 +10,8 @@ function Landing() {
       <main className="container grid place-content-center px-28">
         <Hero />
         <Features />
+        <Faq />
+        <CTASection />
       </main>
     </>
   );
