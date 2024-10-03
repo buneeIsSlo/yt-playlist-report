@@ -1,7 +1,7 @@
 import Faq from "@/components/Faq";
 import Hero from "../components/Hero";
 import Features from "@/components/Features";
-import CTASection from "@/components/Cta";
+import Cta from "@/components/Cta";
 
 function Landing() {
   return (
@@ -11,7 +11,7 @@ function Landing() {
         <Hero />
         <Features />
         <Faq />
-        <CTASection />
+        <Cta />
       </main>
     </>
   );
