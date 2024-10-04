@@ -72,20 +72,23 @@ const questions: TQuestion[] = [
 const Faq: React.FC = () => {
   return (
     <section className="pb-24">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto w-full">
         <div className="mx-auto my-12 flex w-full flex-col items-center justify-center">
-          <h2 className="mb-4 max-w-3xl text-center text-3xl font-bold tracking-tight text-gray-900 md:text-5xl dark:text-gray-100">
+          <p className="text-xs md:text-sm uppercase tracking-wide text-red-600 mb-2">
+            faq
+          </p>
+          <h2 className="mb-2 max-w-3xl text-center text-3xl font-black tracking-tight text-gray-900 md:text-5xl dark:text-gray-100">
             Frequently Asked Questions
           </h2>
-          <p className="max-w-md text-center text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-12">
-            Here are some frequently asked questions. Click on the question to
-            reveal the answer
+          <p className="max-w-md text-center text-lg md:text-xl text-gray-600 dark:text-gray-400">
+            Check out these frequently asked questions! Click on the question to
+            reveal the answer.
           </p>
-          <div className="w-full max-w-3xl">
+          <div className="w-full pt-12 max-w-3xl">
             <Accordion type="single" collapsible className="w-full">
               {questions.map((question, i) => (
                 <AccordionItem key={i} value={`item-${i}`}>
-                  <AccordionTrigger className="text-left">
+                  <AccordionTrigger className="text-left text-base md:text-md">
                     {question.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-base">
