@@ -1,22 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { ScrollText } from "lucide-react";
 
-const Cta = () => {
+const Cta = ({ onCtaClick }: { onCtaClick: () => void }) => {
   return (
-    <section className="bg-red-50 py-16 rounded-md mb-10">
+    <section className="bg-red-100 rounded-md py-16 mb-10 border border-red-300 shadow-md">
       <div className="max-w-3xl mx-auto text-center">
-        <h2 className="text-xs uppercase tracking-wide text-red-600 mb-2">
-          what are you waiting for?
-        </h2>
-        <h3 className="text-4xl font-bold text-gray-900 mb-8">
+        <p className="text-xs md:text-sm uppercase tracking-wide text-red-600 mb-2">
+          it's free real estate
+        </p>
+        <h2 className="text-2xl md:text-4xl font-black tracking-tight text-gray-900 mb-2">
           No ads. No subscriptions. Free forever.
-        </h3>
-        <p className="text-xl text-gray-600 mb-8">
+        </h2>
+        <p className="text-md md:text-lg text-gray-600 mb-8">
           Generate a comprehensive report of any YouTube playlist in seconds.
         </p>
-        <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white">
+        <Button
+          size="lg"
+          className="bg-red-600 hover:bg-red-700 text-white"
+          onClick={onCtaClick}
+        >
           <ScrollText className="mr-2 h-5 w-5" />
-          Generate Playlist Report
+          Generate Report
         </Button>
       </div>
     </section>
