@@ -1,8 +1,10 @@
-import { logoIcon } from "@/assets";
+import { githubIcon, logoIcon } from "@/assets";
+import { Button } from "./ui/button";
+import { StarIcon } from "lucide-react";
 
 const HeaderNav = () => {
   return (
-    <header className="w-full backdrop-blur-lg bg-red-100/5 border-b py-2 sticky top-0 left-0">
+    <header className="w-full backdrop-blur-lg bg-red-100/5 border-b py-2 md:py-2.5 sticky top-0 left-0">
       <div className="container flex justify-between items-center">
         <a href="/" className="">
           <div className="w-fit flex items-center pointer-events-none">
@@ -15,12 +17,22 @@ const HeaderNav = () => {
           </div>
         </a>
         <div className="flex gap-2 items-center">
-          <a href="http://github.com" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
-          <a href="http://x.com" target="_blank" rel="noopener noreferrer">
-            X
-          </a>
+          <Button variant={"outline"} className="bg-transparent p-0 h-fit">
+            <a
+              href="https://github.com/buneeIsSlo/yt-playlist-report"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1"
+            >
+              <span className="border-r px-1 md:p-2">
+                <StarIcon className="w-4 h-4  stroke-yellow-400 fill-yellow-400 " />
+              </span>
+              <span className="px-1 md:p-2 flex items-center gap-1">
+                Star on GitHub
+                <img src={githubIcon} alt="" />
+              </span>
+            </a>
+          </Button>
         </div>
       </div>
     </header>
