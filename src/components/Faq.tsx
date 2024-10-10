@@ -71,13 +71,13 @@ const questions: TQuestion[] = [
 
 const Faq: React.FC = () => {
   return (
-    <section className="pb-24">
+    <section className="py-20">
       <div className="mx-auto w-full">
-        <div className="mx-auto my-12 flex w-full flex-col items-center justify-center">
+        <div className="mx-auto flex w-full flex-col items-center justify-center">
           <p className="text-xs md:text-sm uppercase tracking-wide text-red-600 mb-2">
             faq
           </p>
-          <h2 className="mb-2 max-w-3xl text-center text-3xl font-black tracking-tight text-gray-900 md:text-5xl dark:text-gray-100">
+          <h2 className="mb-2 max-w-3xl text-center text-3xl font-black tracking-tight md:text-5xl dark:text-gray-100">
             Frequently Asked Questions
           </h2>
           <p className="max-w-md text-center text-lg md:text-xl text-gray-600 dark:text-gray-400">

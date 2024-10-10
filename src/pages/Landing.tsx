@@ -4,6 +4,7 @@ import Features from "@/components/Features";
 import Cta from "@/components/Cta";
 import { useRef } from "react";
 import HeaderNav from "@/components/HeaderNav";
+import Footer from "@/components/Footer";
 
 function Landing() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -24,6 +25,7 @@ function Landing() {
         <Faq />
         <Cta onCtaClick={scrollToHero} />
       </main>
+      <Footer />
     </>
   );
 }

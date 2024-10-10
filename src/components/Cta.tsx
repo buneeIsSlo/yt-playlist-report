@@ -3,7 +3,7 @@ import { ScrollText } from "lucide-react";
 
 const Cta = ({ onCtaClick }: { onCtaClick: () => void }) => {
   return (
-    <section className="bg-red-100 rounded-md py-16 mb-10 border border-red-300 shadow-md">
+    <section className="bg-red-100 rounded-md py-16 my-20 border border-red-300 shadow-md">
       <div className="max-w-3xl mx-auto text-center">
         <p className="text-xs md:text-sm uppercase tracking-wide text-red-600 mb-2">
           it's free real estate

@@ -71,7 +71,7 @@ const FeaturesGrid = () => {
               <div className="mb-2 w-fit rounded-lg bg-red-500 p-1.5 text-center text-white ">
                 {feature.icon}
               </div>
-              <div className="text-lg mb-1 font-bold md:text-xl text-gray-900 dark:text-gray-100">
+              <div className="text-lg mb-1 font-bold md:text-xl dark:text-gray-100">
                 {feature.name}
               </div>
               <div className="font-regular text-sm text-gray-600 md:text-lg dark:text-gray-400">
@@ -87,12 +87,12 @@ const FeaturesGrid = () => {
 
 const Features = () => {
   return (
-    <section className="py-24">
-      <div className="my-12 flex w-full flex-col items-center justify-center">
+    <section className="py-20">
+      <div className="flex w-full flex-col items-center justify-center">
         <p className="text-xs md:text-sm uppercase tracking-wide text-red-600 mb-2">
           features
         </p>
-        <h2 className="mb-2 max-w-4xl text-center text-3xl font-black tracking-tighter text-gray-900 md:text-5xl dark:text-gray-100">
+        <h2 className="mb-2 max-w-4xl text-center text-3xl font-black tracking-tighter md:text-5xl dark:text-gray-100">
           Gain Insights into YouTube Playlists
         </h2>
         <p className="max-w-xs text-center text-base sm:max-w-sm md:text-xl text-gray-600 dark:text-gray-400">
