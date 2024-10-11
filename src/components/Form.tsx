@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useNavigate, useNavigation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { fetchPlaylistDetails } from "@/api/PlaylistApi";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 
 const Form = () => {
   const [url, setUrl] = useState("");
@@ -17,6 +18,11 @@ const Form = () => {
       navigate(`playlist/${data.id}`, { state: { playlistDetails: data } });
     },
     onError: (error) => {
+      setUrl("");
+      toast.error("Error generating report", {
+        description: "Make sure the playlist exists and is public",
+        richColors: true,
+      });
       console.error("Error fetching playlist details:", error);
     },
   });
@@ -24,14 +30,29 @@ const Form = () => {
   const isPending =
     navigation.state === "loading" || playlistMutation.isPending;
 
-  function handleSubmit() {
-    if (!url.length) {
-      throw new Error("Invalid playlist URL");
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    let playlistId;
+
+    try {
+      playlistId = new URL(url).searchParams.get("list");
+    } catch (error) {
+      toast.error("Invalid playlist URL", {
+        description: "Please enter a valid playlist URL",
+        richColors: true,
+      });
+      return;
     }
-    const playlistId = new URL(url).searchParams.get("list");
-    if (!playlistId) {
-      throw new Error("Invalid playlist URL");
+
+    if (!url.length || !playlistId) {
+      setUrl("");
+      toast.error("Invalid playlist URL", {
+        description: "Please enter a valid playlist URL",
+        richColors: true,
+      });
+      return;
     }
+
     playlistMutation.mutate(playlistId);
   }
 
@@ -40,8 +61,7 @@ const Form = () => {
       <div className="md:max-w-[70%] mx-auto">
         <form
           onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
+            handleSubmit(e);
           }}
           className="w-full flex flex-col lg:flex-row gap-3 items-center py-2"
         >
@@ -61,9 +81,9 @@ const Form = () => {
           </Button>
         </form>
         {isPending && (
-          <div className="w-fit mx-auto py-1 px-3 mt-2 flex items-center gap-2 rounded-full bg-neutral-200">
+          <div className="w-fit mx-auto py-1 px-3 mt-2 flex items-center gap-2 rounded-full bg-neutral-50 border animate-pulse ">
             <Loader className="w-4 h-4 animate-spin" />
-            <p className="animate-pulse text-center">
+            <p className="text-center">
               Please wait, this may take a few seconds...
             </p>
           </div>

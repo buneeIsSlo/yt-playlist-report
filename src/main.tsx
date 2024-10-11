@@ -6,6 +6,7 @@ import { loader as playlistLoader } from "./api/PlaylistApi.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
 import "./index.css";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <React.StrictMode>
       <RouterProvider router={router} />
+      <Toaster />
     </React.StrictMode>
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
