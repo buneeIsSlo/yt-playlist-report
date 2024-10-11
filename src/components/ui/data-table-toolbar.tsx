@@ -27,71 +27,76 @@ export function DataTableToolbar<TData>({
   totalVideos,
 }: DataTableToolbarProps<TData>) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex gap-1 flex-1 items-center space-x-1">
-        <Input
-          placeholder="Filter videos..."
-          value={(table.getColumn("video")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("video")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="flex gap-1.5 items-center border-[1px] border-dashed border-neutral-300"
-            >
-              <Settings2 className="w-4 h-4" />
-              Select Range
+    <div className="overflow-x-auto">
+      <div className="flex items-center justify-between gap-2 min-w-max">
+        <div className="flex gap-1 flex-1 items-center space-x-1">
+          <Input
+            placeholder="Filter videos..."
+            value={(table.getColumn("video")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("video")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="flex gap-1.5 items-center border-[1px] border-dashed border-neutral-300"
+              >
+                <Settings2 className="w-4 h-4" />
+                Select Range
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent side="bottom" align="start" className="min-w-96">
+              <div className="py-8">
+                <DualRangeSlider
+                  label={(value) => `${value}`}
+                  defaultValue={rangeValue}
+                  onValueCommit={onRangeChange}
+                  min={1}
+                  max={totalVideos}
+                  step={1}
+                  minStepsBetweenThumbs={1}
+                />
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"}>
+              <TableIcon className="w-4 h-4 mr-2" />
+              Columns
             </Button>
-          </PopoverTrigger>
-          <PopoverContent side="bottom" align="start">
-            <div className="py-8 w-full">
-              <DualRangeSlider
-                label={(value) => `${value}`}
-                defaultValue={rangeValue}
-                onValueCommit={onRangeChange}
-                min={1}
-                max={totalVideos}
-                step={1}
-                minStepsBetweenThumbs={1}
-              />
-            </div>
-          </PopoverContent>
-        </Popover>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[150px]">
+            <DropdownMenuLabel>Toggle Columns</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {table
+              .getAllColumns()
+              .filter(
+                (column) =>
+                  typeof column.accessorFn !== "undefined" &&
+                  column.getCanHide()
+              )
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
-            <TableIcon className="w-4 h-4 mr-2" />
-            Columns
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[150px]">
-          <DropdownMenuLabel>Toggle Columns</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {table
-            .getAllColumns()
-            .filter(
-              (column) =>
-                typeof column.accessorFn !== "undefined" && column.getCanHide()
-            )
-            .map((column) => {
-              return (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.id}
-                </DropdownMenuCheckboxItem>
-              );
-            })}
-        </DropdownMenuContent>
-      </DropdownMenu>
     </div>
   );
 }

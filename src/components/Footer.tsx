@@ -2,7 +2,7 @@ import { githubIcon, xIcon } from "@/assets";
 
 const Footer = () => {
   return (
-    <footer className="w-full mt-8 border-t">
+    <footer className="w-full max-h-fit mt-8 border-t -inset-10 mb-10">
       <div className="container py-2.5 flex justify-between items-center">
         <div>
           <p className="text-gray-500 text-xs md:text-sm lg:text-base">
