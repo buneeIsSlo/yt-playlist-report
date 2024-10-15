@@ -27,8 +27,8 @@ export function DataTableToolbar<TData>({
   totalVideos,
 }: DataTableToolbarProps<TData>) {
   return (
-    <div className="overflow-x-auto">
-      <div className="flex items-center justify-between gap-2 min-w-max">
+    <div className="overflow-x-auto lg:overflow-visible">
+      <div className="flex items-center justify-between gap-2 min-w-max py-1">
         <div className="flex gap-1 flex-1 items-center space-x-1">
           <Input
             placeholder="Filter videos..."
