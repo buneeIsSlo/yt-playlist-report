@@ -15,7 +15,7 @@ const formatDate = (timeStr: string): string => {
 const columns: ColumnDef<VideoItem>[] = [
   {
     id: "position",
-    accessorFn: (row, index) => index + 1,
+    accessorFn: (_row, index) => index + 1,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Position" />
     ),

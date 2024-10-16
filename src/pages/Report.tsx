@@ -22,6 +22,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Barcode from "react-barcode";
 import { logoIcon } from "@/assets";
 
+// Extend BarcodeProps to include 'text' and 'className' for customization.
+declare module "react-barcode" {
+  export interface BarcodeProps {
+    text?: string;
+    className?: string;
+  }
+}
+
 const PLAYBACK_SPEED_VALUES = [
   "0.25",
   "0.5",
