@@ -56,7 +56,7 @@ const questions: TQuestion[] = [
       <>
         😇 You're a real one. A star on the{" "}
         <a
-          href="https://github.com/your-repo-link"
+          href="https://github.com/buneeIsSlo/yt-playlist-report"
           target="_blank"
           rel="noopener noreferrer"
           className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"

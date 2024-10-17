@@ -4,7 +4,7 @@ import { useNavigate, useNavigation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { fetchPlaylistDetails } from "@/api/PlaylistApi";
-import { Loader } from "lucide-react";
+import { Loader, ScrollText } from "lucide-react";
 import { toast } from "sonner";
 
 const Form = () => {
@@ -77,6 +77,7 @@ const Form = () => {
             className="mt-0 w-full py-6 md:py-6 md:px-8 md:text-base lg:w-fit bg-red-600 hover:bg-red-800 transition-colors"
             disabled={isPending}
           >
+            <ScrollText className="w-4 h-4 md:w-5 md:h-5 mr-2" />
             {isPending ? "Generating..." : "Generate"}
           </Button>
         </form>

@@ -1,5 +1,6 @@
 import Form from "./Form";
 import { FlipWords } from "./ui/flip-words";
+import { ytprDemo } from "@/assets";
 
 const Hero = () => {
   const strings = [
@@ -28,9 +29,9 @@ const Hero = () => {
       <div className="mt-16">
         <div className="flex max-w-5xl justify-center mx-auto overflow-clip">
           <img
-            src="https://dashboardsdesign.com/img/dashboards/dashboard-05-custom.png"
+            src={ytprDemo}
             alt="hero-section"
-            className="h-full w-full rounded-lg object-cover md:w-[1300px]"
+            className="h-full w-full rounded-xl object-cover md:w-[1300px] border-8 border-slate-200 block"
             style={{
               maskImage: `linear-gradient(to top, transparent, black 20%)`,
             }}

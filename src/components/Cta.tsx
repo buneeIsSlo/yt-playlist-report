@@ -16,10 +16,10 @@ const Cta = ({ onCtaClick }: { onCtaClick: () => void }) => {
         </p>
         <Button
           size="lg"
-          className="bg-red-600 hover:bg-red-700 text-white"
+          className="py-6 md:py-6 md:px-8 md:text-base lg:w-fit bg-red-600 hover:bg-red-800 transition-colors"
           onClick={onCtaClick}
         >
-          <ScrollText className="mr-2 h-5 w-5" />
+          <ScrollText className="mr-2 h-4 w-4 md:h-4 md:w-5" />
           Generate Report
         </Button>
       </div>
