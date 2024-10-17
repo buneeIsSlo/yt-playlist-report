@@ -8,7 +8,7 @@ import {
   parseDuration,
 } from "@/api/PlaylistApi";
 import VideoTable from "@/components/VideosTable";
-import columns from "@/components/ui/columns";
+import createColumns from "@/components/ui/columns";
 import {
   Select,
   SelectContent,
@@ -19,16 +19,8 @@ import {
 import { Zap, History, Clock, Film, ExternalLink } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
-import Barcode from "react-barcode";
 import { logoIcon } from "@/assets";
-
-// Extend BarcodeProps to include 'text' and 'className' for customization.
-declare module "react-barcode" {
-  export interface BarcodeProps {
-    text?: string;
-    className?: string;
-  }
-}
+import QRCode from "react-qr-code";
 
 const PLAYBACK_SPEED_VALUES = [
   "0.25",
@@ -50,8 +42,6 @@ const PlaylistDuration: React.FC = () => {
     return <div>No video details available</div>;
   }
 
-  console.log(values[0] - 1, values[1] + 1);
-
   const selectedVideos = data.videos.slice(values[0] - 1, values[1]);
   const totalDuration = selectedVideos.reduce(
     (acc, video) => acc + parseDuration(video.contentDetails.duration),
@@ -63,6 +53,9 @@ const PlaylistDuration: React.FC = () => {
   const handleSpeedChange = (value: string) => {
     setPlaybackSpeed(parseFloat(value));
   };
+
+  // Create columns with the playlistId
+  const columns = createColumns(playlistId!);
 
   return (
     <div className="mx-auto">
@@ -144,7 +137,14 @@ const PlaylistInfo: React.FC<{ details: PlaylistDetails }> = ({ details }) => {
           </span>
         </p>
         <p className="flex gap-1.5 items-center underline">
-          <span className="text-sm lg:text-base">Visit Playlist</span>
+          <a
+            href={`https://youtube.com/playlist?list=${details.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm lg:text-base"
+          >
+            Visit Playlist
+          </a>
           <ExternalLink className="w-3 h-3 lg:w-4 lg:h-4" />
         </p>
       </div>
@@ -163,11 +163,12 @@ const PlaylistInfo: React.FC<{ details: PlaylistDetails }> = ({ details }) => {
         </a>
       </div>
 
-      <div className="max-w-fit flex items-end order-3">
-        <Barcode
-          value={`http://google.com`}
-          text={`${details.id}`}
-          className="max-w-[200px] lg:max-w-[300px] h-fit"
+      <div className="max-w-fit flex justify-start md:justify-end order-3">
+        <QRCode
+          size={224}
+          style={{ height: "auto", maxWidth: "100%", width: "35%" }}
+          value={`https://ytpr.netlify.app/playlist/${details.id}`}
+          viewBox={`0 0 2224 224`}
         />
       </div>
     </div>
@@ -207,7 +208,7 @@ const Report: React.FC = () => {
 
   return (
     <>
-      <div className="xl:px-28 min-h-dvh pb-4">
+      <div className="xl:px-28 min-h-dvh py-6">
         <div className="container mx-auto mt-8 rounded-lg">
           <PlaylistInfo details={playlistDetails} />
           <Suspense fallback={<ReportSkeleton />}>

@@ -179,7 +179,6 @@ const calculatePlaylistDetails = async (
 ): Promise<{ videos: VideoItem[]; duration: string; avgDuration: string }> => {
   const videoIds = await fetchPlaylistVideoIds(playlistId);
   const { videos, totalDuration } = await fetchVideoDetails(videoIds);
-  console.log(videos.length);
   const avgDuration = Math.round(totalDuration / videos.length);
   return {
     videos,
@@ -191,7 +190,7 @@ const calculatePlaylistDetails = async (
 export const createPlaylistDetailsQuery = (id: string) => ({
   queryKey: ["playlist", id],
   queryFn: () => calculatePlaylistDetails(id),
-  staleTime: 5 * 60 * 1000,
+  staleTime: 1000 * 60 * 5,
 });
 
 export const fetchPlaylistDetails = async (
