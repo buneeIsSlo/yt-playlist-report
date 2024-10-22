@@ -1,30 +1,74 @@
-# React + TypeScript + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# [🎞 YouTube Playlist Report](https://ytpr.netlify.app)
 
-Currently, two official plugins are available:
+Generate comprehensive reports for YouTube playlists. Get insights on total duration, average video length, and detailed statistics for each video.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![desktop screenshot](./public/preview.png)
 
-## Expanding the ESLint configuration
+</div>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## ✨ Features
 
-- Configure the top-level `parserOptions` property like this:
+- Comprehensive Insights: Get detailed info about your playlists, including total duration, average video duration, number of videos, and specific details for each video.
+- Playback Speed Adjustment: Customize your viewing experience by adjusting the playback speed from 0.25x to 2x.
+- Flexible Sorting Options: Easily sort videos by position, duration, views, likes, or publish date.
+- Efficient Filtering: Use the search bar to quickly filter and find specific videos within your playlist.
+- Targeted Analysis: Analyze only the portions of the playlist that interest you with a range selector.
+- Customizable Table View: Tailor your video table by toggling specific columns.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## 🧰 Tech used
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- React
+- TypeScript
+- Vite
+- React Router
+- Tanstack Query
+- Tailwind CSS
+- Shadcn UI
+- Framer Motion
+
+## 💻 Setup Locally
+
+1. Clone the repository
+2. Install dependencies: `pnpm install`
+3. Create a `.env` file in the root directory and add your YouTube API key:
+   ```
+   VITE_YOUTUBE_API_KEY=your_api_key_here
+   ```
+4. Run the development server: `npm run dev`
+5. Open `http://localhost:5001` in your browser
+
+## 🛣 Roadmap
+
+- [ ] Implement dark mode
+
+## 🌈 Inspiration
+
+_To-do_
+
+## 💡 Learnings
+
+_To-do_
+
+## 📜 License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## 💙 Acknowledgements
+
+- [Shadcn UI](https://ui.shadcn.com/), for the accessible and intuitive UI components
+- [Syntax UI](https://syntaxui.com/) and [Aceternity UI](https://ui.aceternity.com/), for the beautiful Landing page components
+- [YouTube Data API](https://developers.google.com/youtube/v3) for providing access to playlist data
+
+<hr>
+
+<div align="center">
+
+<strong>⭐ Leave a star maybe? ⭐</strong><br>
+
+<a href="https://github.com/buneeIsSlo/yt-playlist-report">Source</a>
+| <a href="https://twitter.com/awwbhi2" target="_blank">Twitter</a>
+| <a href="https://github.com/buneeIsSlo" target="_blank">GitHub</a>
+
+</div>
