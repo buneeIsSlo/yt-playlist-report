@@ -1,6 +1,9 @@
+import { Link } from "react-router-dom";
 import Form from "./Form";
+import { Button } from "./ui/button";
 import { FlipWords } from "./ui/flip-words";
 import { ytprDemo } from "@/assets";
+import { Presentation } from "lucide-react";
 
 const Hero = () => {
   const strings = [
@@ -16,7 +19,7 @@ const Hero = () => {
         <h1 className="text-4xl text-center md:text-6xl text-neutral-800 font-black max-w-[25ch] md:text-center mx-auto my-10">
           <FlipWords words={strings} className="px-0 text-center" />
           <br />
-          of any{" "}
+          of <em>any</em>{" "}
           <span className="relative block w-fit mx-auto lg:inline">
             <span className="underline decoration-red-600 decoration">
               YouTube Playlist
@@ -27,7 +30,7 @@ const Hero = () => {
       </div>
       <Form />
       <div className="mt-16">
-        <div className="flex max-w-5xl justify-center mx-auto overflow-clip">
+        <div className="flex max-w-5xl justify-center mx-auto overflow-clip relative">
           <img
             src={ytprDemo}
             alt="hero-section"
@@ -36,6 +39,20 @@ const Hero = () => {
               maskImage: `linear-gradient(to top, transparent, black 20%)`,
             }}
           />
+          <Button
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-red-600 hover:bg-red-800"
+            size={"lg"}
+            asChild
+          >
+            <Link
+              to="playlist/PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ"
+              className="text-white flex gap-2 items-center"
+              reloadDocument
+            >
+              <Presentation className="size-5" />
+              View Demo
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
