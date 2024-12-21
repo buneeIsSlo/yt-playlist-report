@@ -30,7 +30,7 @@ const Hero = () => {
       </div>
       <Form />
       <div className="mt-16">
-        <div className="flex max-w-5xl justify-center mx-auto overflow-clip relative">
+        <div className="flex max-w-5xl justify-center mx-auto overflow-clip relative aspect-[16/9] w-full">
           <img
             src={ytprDemo}
             alt="hero-section"
@@ -54,6 +54,12 @@ const Hero = () => {
             </Link>
           </Button>
         </div>
+      </div>
+      <div className="mt-16 text-center">
+        <p className="text-xl md:text-3xl text-neutral-800 font-semibold">
+          <span className="text-red-600 italic font-bold">400+</span> Reports
+          Generated 🎉
+        </p>
       </div>
     </section>
   );

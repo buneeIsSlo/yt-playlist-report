@@ -24,8 +24,9 @@ const HeaderNav = () => {
               rel="noopener noreferrer"
               className="flex flex-row-reverse items-center gap-1"
             >
-              <span className="border-l p-2">
-                <StarIcon className="w-4 h-4  stroke-yellow-400 fill-yellow-400 " />
+              <span className="border-l p-2 flex gap-1 items-center">
+                <StarIcon className="w-4 h-4  stroke-yellow-400 fill-yellow-400" />
+                <span className="font-semibold">8</span>
               </span>
               <span className="px-1 md:p-2 flex flex-row-reverse items-center gap-1">
                 Star on GitHub
