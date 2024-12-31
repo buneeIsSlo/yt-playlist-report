@@ -203,6 +203,7 @@ const Report: React.FC = () => {
   const { playlistDetails, videoDetails } = useLoaderData() as LoaderData;
 
   if (!playlistDetails) {
+    console.log("stop it!!");
     return <div>Error: Failed to load playlist data</div>;
   }
 

@@ -3,7 +3,7 @@ import Form from "./Form";
 import { Button } from "./ui/button";
 import { FlipWords } from "./ui/flip-words";
 import { ytprDemo } from "@/assets";
-import { ChevronRight, Presentation } from "lucide-react";
+import { Presentation } from "lucide-react";
 
 const Hero = () => {
   const strings = [
@@ -16,13 +16,6 @@ const Hero = () => {
   return (
     <section className="py-28">
       <div>
-        <Link
-          to="/playlist/PLs_BtJUr-PzQQLWIg82WdIOyYs0An9jzi"
-          className="mx-auto w-fit mb-16 px-4 py-0.5 rounded-full bg-red-200/10 backdrop-blur-sm text-red-600 font-medium hover:bg-red-200/20 transition-colors shadow-md border border-red-600 flex items-center gap-1"
-        >
-          🎄 Best Christmas Songs Playlist
-          <ChevronRight className="size-4 text-red-600" />
-        </Link>
         <h1 className="text-4xl text-center md:text-6xl text-neutral-800 font-black max-w-[25ch] md:text-center mx-auto my-10">
           <FlipWords words={strings} className="px-0 text-center" />
           <br />

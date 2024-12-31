@@ -207,6 +207,13 @@ export const fetchPlaylistDetails = async (
   const data = await response.json();
   const playlist = data.items[0];
 
+  if (playlist === undefined) {
+    // throw new Error("Invalid plalylist id");
+    return undefined;
+  }
+
+  console.log(playlist);
+
   return {
     id: playlist.id,
     title: playlist.snippet.title,
