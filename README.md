@@ -32,16 +32,16 @@ Generate comprehensive reports for YouTube playlists. Get insights on total dura
 
 1. Clone the repository
 2. Install dependencies: `pnpm install`
-3. Create a `.env` file in the root directory and add your YouTube API key:
+3. Create a `.env.local` file in the root directory and add your YouTube API key:
    ```
-   VITE_YOUTUBE_API_KEY=your_api_key_here
+   VITE_YT_API_KEY=your_api_key_here
    ```
 4. Run the development server: `npm run dev`
 5. Open `http://localhost:5001` in your browser
 
 ## 🛣 Roadmap
 
-- [ ] Implement dark mode
+- [ ] Add tests
 
 ## 🌈 Inspiration
 
