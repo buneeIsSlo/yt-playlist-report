@@ -66,7 +66,7 @@ const createColumns = (playlistId: string): ColumnDef<VideoItem>[] => [
   },
   {
     id: "duration",
-    accessorFn: (row) => row.contentDetails.duration,
+    accessorFn: (row) => parseDuration(row.contentDetails.duration),
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Duration" />
     ),
